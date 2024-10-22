@@ -1,3 +1,10 @@
+"""
+            Password Generator
+Author: John Doe
+Created: 2024-10-20
+Last Modified: 2024-10-22
+Description: This script generates a random password using letters, numbers, and symbols.
+"""
 import random
 
 chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*().,?0123456789'
