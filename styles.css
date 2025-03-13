@@ -1,0 +1,687 @@
+/* Import better fonts */
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap");
+
+/* Base styles and color variables */
+:root {
+  --orange-primary: #ff7700;
+  --orange-light: #ff9944;
+  --orange-dark: #e05f00;
+  --black-primary: #1a1a1a; /* Darker black */
+  --bg-dark: #0a0a0a; /* Darker background */
+  --text-light: #f5f5f5;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+body {
+  background-color: var(--bg-dark);
+  color: var(--text-light);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Grid background */
+.grid-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  grid-template-rows: repeat(12, 1fr);
+  gap: 1px;
+  z-index: -1;
+}
+
+.grid-square {
+  background-color: rgba(255, 119, 0, 0.05);
+  border: 1px solid rgba(255, 119, 0, 0.12);
+  transition: all 0.4s ease;
+}
+
+.grid-square:hover {
+  background-color: rgba(255, 119, 0, 0.25);
+  box-shadow: 0 0 20px rgba(255, 119, 0, 0.5);
+  transform: scale(1.05);
+}
+
+/* Container for the password generator */
+.container {
+  background-color: var(--black-primary);
+  border-radius: 16px;
+  padding: 40px;
+  width: 90%;
+  max-width: 450px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 0 2px var(--orange-primary),
+    0 0 60px rgba(255, 119, 0, 0.5);
+  text-align: center;
+  z-index: 1;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  
+  /* Add animation for page load */
+  animation: containerAppear 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+/* Define the containerAppear animation */
+@keyframes containerAppear {
+  0% {
+    opacity: 0;
+    transform: translateY(100px);
+  }
+  70% {
+    transform: translateY(-15px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Container hover animation */
+.container:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6), 0 0 0 2px var(--orange-light),
+    0 0 80px rgba(255, 119, 0, 0.6);
+}
+
+/* Add decorative elements to container */
+.container::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 6px;
+  background: linear-gradient(
+    to right,
+    var(--orange-dark),
+    var(--orange-light)
+  );
+}
+
+.container::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 120px;
+  height: 120px;
+  background: radial-gradient(
+    circle,
+    rgba(255, 119, 0, 0.2) 0%,
+    rgba(255, 119, 0, 0) 70%
+  );
+  border-radius: 50%;
+  z-index: -1;
+  transition: all 0.5s ease;
+}
+
+.container:hover::after {
+  width: 150px;
+  height: 150px;
+  opacity: 0.8;
+}
+
+/* Title styling */
+.title {
+  display: block;
+  color: var(--orange-primary);
+  font-size: 32px;
+  font-weight: 700;
+  margin-bottom: 30px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  letter-spacing: 1px;
+  position: relative;
+}
+
+.title::after {
+  content: "";
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 3px;
+  background-color: var(--orange-primary);
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
+
+.container:hover .title::after {
+  width: 100px;
+}
+
+/* Custom input wrapper and spinner styling */
+.input-wrapper {
+  position: relative;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+#passwordLength {
+  width: 100%;
+  padding: 14px 18px;
+  border: 2px solid var(--orange-primary);
+  border-radius: 8px;
+  background-color: rgba(0, 0, 0, 0.3);
+  color: var(--text-light);
+  font-size: 16px;
+  outline: none;
+  transition: all 0.3s ease;
+  font-family: "Space Mono", monospace;
+  box-sizing: border-box;
+}
+
+/* Hide default spinners for Chrome, Safari, Edge, Opera */
+#passwordLength::-webkit-outer-spin-button,
+#passwordLength::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.spinner-buttons {
+  position: absolute;
+  right: 10px; /* Position more precisely inside the input */
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  border-left: 1px solid rgba(255, 119, 0, 0.3);
+  padding-left: 8px;
+  background-color: transparent; /* Ensure background is transparent */
+}
+
+/* Style the individual buttons more distinctly */
+.spinner-up,
+.spinner-down {
+  background: none;
+  border: none;
+  color: var(--orange-light);
+  cursor: pointer;
+  flex: 1; /* Use flex instead of height percentage */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px; /* Slightly smaller font size */
+  padding: 0 5px;
+  transition: all 0.2s ease;
+  /* Remove any default button padding or margin */
+  margin: 0;
+  outline: none;
+  max-height: 18px; /* Ensure equal height for both buttons */
+}
+
+.spinner-up:hover,
+.spinner-down:hover {
+  color: var(--orange-primary);
+  background-color: rgba(255, 119, 0, 0.1);
+  border-radius: 3px;
+}
+
+.spinner-up:active,
+.spinner-down:active {
+  transform: scale(0.95);
+}
+
+.spinner-active {
+  background-color: rgba(255, 119, 0, 0.2) !important;
+  transform: scale(0.9) !important;
+}
+
+/* Hide default spinners for Chrome, Safari, Edge, Opera */
+#passwordLength::-webkit-outer-spin-button,
+#passwordLength::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* For Firefox */
+#passwordLength {
+  appearance: textfield;
+  -moz-appearance: textfield;
+}
+
+#passwordLength:focus {
+  box-shadow: 0 0 0 3px rgba(255, 119, 0, 0.3);
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+/* Button styling - main generate button */
+#btn {
+  background: linear-gradient(
+    to bottom,
+    var(--orange-light),
+    var(--orange-primary)
+  );
+  color: var(--black-primary);
+  border: none;
+  border-radius: 8px;
+  padding: 14px 28px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 24px;
+  box-shadow: 0 4px 12px rgba(255, 119, 0, 0.3);
+  width: 100%;
+}
+
+#btn:hover {
+  background: linear-gradient(
+    to bottom,
+    var(--orange-primary),
+    var(--orange-dark)
+  );
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(255, 119, 0, 0.4);
+}
+
+#btn:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(255, 119, 0, 0.3);
+}
+
+/* Action buttons styling (Clear and Copy) */
+.container button:not(#btn) {
+  background-color: rgba(255, 119, 0, 0.15);
+  color: var(--orange-light);
+  border: 1px solid var(--orange-primary);
+  border-radius: 6px;
+  padding: 10px 18px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin: 10px;
+  width: calc(50% - 20px);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.container button:not(#btn):hover {
+  background-color: rgba(255, 119, 0, 0.25);
+  color: var(--text-light);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.container button:not(#btn):active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+/* Password result styling */
+p {
+  margin-bottom: 12px;
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+#passwordResult {
+  background-color: rgba(255, 119, 0, 0.12); /* Slightly darker background */
+  border: 1px solid var(--orange-primary);
+  border-radius: 8px;
+  padding: 16px;
+  font-size: 18px;
+  font-family: "Space Mono", monospace;
+  overflow-wrap: break-word;
+  min-height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-shadow: 0 0 5px rgba(255, 119, 0, 0.3);
+  letter-spacing: 1px;
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+
+#passwordResult::before {
+  content: "";
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(
+    45deg,
+    transparent,
+    rgba(255, 119, 0, 0.3),
+    transparent
+  );
+  z-index: -1;
+  background-size: 200% 200%;
+  animation: shimmer 2s linear infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* Password generated animation */
+.password-generated {
+  animation: pulse 0.3s ease-in-out;
+}
+
+/* Copy animation */
+.copied {
+  animation: copy-flash 0.8s ease-in-out;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes copy-flash {
+  0% {
+    background-color: rgba(255, 119, 0, 0.12);
+  }
+  30% {
+    background-color: rgba(255, 119, 0, 0.5);
+    color: #000;
+  }
+  100% {
+    background-color: rgba(255, 119, 0, 0.12);
+  }
+}
+
+/* Copy notification */
+.copy-notification {
+  position: absolute;
+  background-color: var(--orange-primary);
+  color: var(--black-primary);
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  top: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0;
+  transition: all 0.3s ease;
+  z-index: 10;
+}
+
+.copy-notification.show {
+  top: -10px;
+  opacity: 1;
+}
+
+/* Copy button animation */
+@keyframes button-copied {
+  0% {
+    transform: scale(1);
+  }
+  10% {
+    transform: scale(0.9);
+  }
+  30% {
+    transform: scale(1.1);
+    background-color: var(--orange-primary);
+    color: var(--black-primary);
+  }
+  50% {
+    transform: scale(1);
+    box-shadow: 0 0 15px var(--orange-primary);
+  }
+  70% {
+    transform: rotate(5deg);
+  }
+  85% {
+    transform: rotate(-5deg);
+  }
+  100% {
+    transform: rotate(0);
+  }
+}
+
+.button-copied {
+  animation: button-copied 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+  pointer-events: none;
+}
+
+/* Enhance the copy animation */
+@keyframes copy-flash {
+  0% {
+    background-color: rgba(255, 119, 0, 0.12);
+  }
+  20% {
+    background-color: rgba(255, 119, 0, 0.5);
+    color: var(--black-primary);
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.7);
+    box-shadow: 0 0 20px rgba(255, 119, 0, 0.7);
+    transform: scale(1.03);
+  }
+  40% {
+    background-color: rgba(255, 119, 0, 0.3);
+    transform: scale(1);
+  }
+  60% {
+    background-color: rgba(255, 119, 0, 0.4);
+    transform: scale(1.01);
+  }
+  100% {
+    background-color: rgba(255, 119, 0, 0.12);
+    transform: scale(1);
+  }
+}
+
+/* Copy notification enhanced */
+.copy-notification {
+  position: absolute;
+  background-color: var(--orange-primary);
+  color: var(--black-primary);
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 600;
+  top: -50px; /* Increased initial position to start from higher */
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  z-index: 10;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.copy-notification.show {
+  top: 10px; /* Changed from -25px to 10px to position it lower and fully visible */
+  opacity: 1;
+}
+
+/* Add an additional glow effect when copying */
+.copied::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(
+    circle,
+    rgba(255, 119, 0, 0.8) 0%,
+    rgba(255, 119, 0, 0) 70%
+  );
+  opacity: 0;
+  z-index: -1;
+  animation: glow-pulse 1s ease-out;
+}
+
+@keyframes glow-pulse {
+  0% {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(1.1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.5);
+  }
+}
+
+/* Clear button animation */
+@keyframes button-cleared {
+  0% {
+    transform: scale(1);
+  }
+  10% {
+    transform: scale(0.9);
+  }
+  30% {
+    transform: scale(1.1);
+    background-color: var(--orange-primary);
+    color: var(--black-primary);
+  }
+  50% {
+    box-shadow: 0 0 25px var(--orange-primary);
+  }
+  70% {
+    transform: translateX(3px);
+  }
+  80% {
+    transform: translateX(-3px);
+  }
+  90% {
+    transform: translateX(2px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+.button-cleared {
+  animation: button-cleared 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+  pointer-events: none;
+}
+
+/* Password cleared animation */
+.cleared {
+  animation: clear-wipe 1.5s cubic-bezier(0.645, 0.045, 0.355, 1) forwards;
+  position: relative;
+  overflow: hidden;
+}
+
+@keyframes clear-wipe {
+  0% {
+    background-color: rgba(255, 119, 0, 0.12);
+    clip-path: inset(0 0 0 0);
+  }
+  5% {
+    background-color: rgba(255, 119, 0, 0.18);
+  }
+  10% {
+    background-color: rgba(255, 119, 0, 0.28);
+    clip-path: inset(0 0 0 2%);
+  }
+  20% {
+    background-color: rgba(255, 119, 0, 0.4);
+    clip-path: inset(0 0 0 12%);
+  }
+  35% {
+    background-color: rgba(255, 119, 0, 0.45);
+    clip-path: inset(0 0 0 30%);
+  }
+  50% {
+    background-color: rgba(255, 119, 0, 0.4);
+    clip-path: inset(0 0 0 50%);
+  }
+  70% {
+    background-color: rgba(255, 119, 0, 0.35);
+    clip-path: inset(0 0 0 70%);
+  }
+  85% {
+    background-color: rgba(255, 119, 0, 0.25);
+    clip-path: inset(0 0 0 85%);
+  }
+  95% {
+    background-color: rgba(255, 119, 0, 0.15);
+    clip-path: inset(0 0 0 95%);
+  }
+  100% {
+    background-color: rgba(255, 119, 0, 0.1);
+    clip-path: inset(0 0 0 100%);
+  }
+}
+
+/* Clear notification styling */
+.clear-notification {
+  position: absolute;
+  background-color: var(--orange-primary);
+  color: var(--black-primary);
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 600;
+  top: -50px;
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  z-index: 10;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.clear-notification.show {
+  top: 10px;
+  opacity: 1;
+}
+
+/* Buttons container for side-by-side layout */
+.button-container {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  gap: 15px;
+  margin-top: 10px;
+}
+
+/* Update button styling for equal widths */
+.button-container button {
+  flex: 1;
+  margin: 0 !important; /* Override the existing margins */
+  width: auto !important; /* Override the fixed width */
+}
+
+/* Action buttons styling (Clear and Copy) - Update this section */
+.container button:not(#btn) {
+  background-color: rgba(255, 119, 0, 0.15);
+  color: var(--orange-light);
+  border: 1px solid var(--orange-primary);
+  border-radius: 6px;
+  padding: 10px 18px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}

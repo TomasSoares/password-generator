@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Password Generator</title>
+    <link rel="stylesheet" href="./styles.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <span class="title">Password Generator</span>
+      <div class="input-wrapper">
+        <input
+          type="number"
+          id="passwordLength"
+          placeholder="Password Length"
+        />
+        <div class="spinner-buttons">
+          <button class="spinner-up" onclick="incrementValue()">▲</button>
+          <button class="spinner-down" onclick="decrementValue()">▼</button>
+        </div>
+      </div>
+      <button onclick="generatePassword()" id="btn">Generate!</button>
+      <p>Your New Password:</p>
+      <p id="passwordResult"></p>
+      <div class="button-container">
+        <button id="copyButton" onclick="copyPassword()">Copy</button>
+        <button id="clrButton" onclick="clearPassword()">Clear</button>
+      </div>
+    </div>
+
+    <script src="./main.js"></script>
+  </body>
+</html>
